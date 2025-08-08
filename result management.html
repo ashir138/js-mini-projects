@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        const username1 = "ashir", password1 = 1234;
+        const arr = ["Add Student", "Delete Student", "View Students", "Logout"];
+        const students = [];
+        let student = {
+            name: "",
+            class: 0,
+            marks: {
+                english: 0,
+                maths: 0,
+                science: 0
+            },
+            total: 0,
+            grade: ""
+            };
+        function add(){
+            document.getElementById('dashboard').style.display = "none";
+            document.getElementById('addStudent').style.display = "block";
+        }
+        function AddStudent(){
+            name1 = document.getElementById('stdName').value;
+            class1 = parseInt(document.getElementById('class').value);
+            eng = parseFloat(document.getElementById('eng').value);
+            math = parseFloat(document.getElementById('math').value);
+            sci = parseFloat(document.getElementById('science').value);
+            let student = {
+            name: name1,
+            class: class1,
+            marks: {
+                english: eng,
+                maths: math,
+                science: sci
+            },
+            total: function(){
+                return this.marks.english+this.marks.maths+this.marks.science;
+            },
+            grade: function(){
+                let total = this.total();
+                let percent = (total * 100)/300;
+                if(percent>=80){ 
+                    return "A";
+                }else if(percent>=60){
+                    return "B";
+                }else if(percent>=40){
+                    return "C";
+                }else if(percent<40){
+                    return "F";
+                }else{
+                    return "";
+                }
+            }
+            };
+            students.push(student);
+            alert(`Student ${name1} Added Successfully!`);
+            dashboard();
+        }
+        function dlt(){
+            document.getElementById('dashboard').style.display = "none";
+            document.getElementById('dltstudent').style.display = "block";
+        }
+        function deleteStudent(){
+            let name = document.getElementById('dltstdName').value;
+            let index = students.findIndex(std => std.name === name);
+            if(index != -1){
+                students.splice(index, 1);
+                alert(`Student ${name} Deleted Successfully! `);
+                dashboard();
+            }else{
+                alert("Student not Found!");
+                dashboard();
+            }
+        }
+        function view(){
+            document.getElementById('dashboard').style.display = "none";
+            document.getElementById('viewstudent').style.display = "block";
+            viewStudent();
+        }
+        function viewStudent(){
+            let text = "";
+            for(x in students){
+                text += "<tr>";
+                text += "<td>" + students[x].name + "</td>";
+                text += "<td>" + students[x].class + "</td>";
+                text += "<td>" + students[x].marks.english + "</td>";
+                text += "<td>" + students[x].marks.maths + "</td>";
+                text += "<td>" + students[x].marks.science + "</td>";
+                text += "<td>" + students[x].total() + "</td>";
+                text += "<td>" + students[x].grade() + "</td>";
+                text += "</tr>";
+            }
+            document.getElementById('stdview').innerHTML = text;
+        }
+        function login(){
+            let username = document.getElementById('username').value;
+            let password = document.getElementById('password').value;
+            if(username1 == username && password1 == password){
+                dashboard();
+                alert("Logged In Successfully");
+                dashboard();
+            }else{
+                alert("Invalid Credintials!");
+            }
+        }
+        function dashboard(){
+            document.getElementById('Log').style.display = "none";
+            document.getElementById('dltstudent').style.display = "none";
+            document.getElementById('addStudent').style.display = "none";
+            document.getElementById('viewstudent').style.display = "none";
+            let text="<ol>";
+                for(x in arr){
+                    text += "<li>" + arr[x] + "</li>";
+                }
+                document.getElementById('opt').innerHTML = text;
+            document.getElementById('dashboard').style.display = "block";
+        }
+        function operations(){
+            let op = parseInt(document.getElementById('op').value);
+            switch(op){
+                case 1:
+                    add();
+                    break;
+                case 2:
+                    dlt();
+                    break;
+                case 3:
+                    view();
+                    break;
+                case 4:
+                    window.location.reload();
+                    break;
+                default:
+                    alert('Enter in between Range');
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Student Result Management System</h1>
+    <div id="Log" style="display: block;">
+        <h2>Login</h2>
+        <label for="username">Username: </label>
+        <input type="text" name="username" id="username">
+        <label for="password">Password: </label>
+        <input type="password" name="password" id="password">
+        <button type="submit" onclick="login()">Login</button>
+    </div>
+    <div id="dashboard" style="display: none;">
+        <h2>Welcome to the Dashboard</h2>
+        <p id="opt"></p>
+        <input type="number" name="op" id="op" placeholder="eg 1 to Add User">
+        <button type="submit" onclick="operations()">Submit</button>
+    </div>
+    <div id="addStudent" style="display: none;">
+        <h2>Adding New Student Module</h2>
+        <label for="stdName">Student Name: </label>
+        <input type="text" name="stdName" id="stdName">
+        <label for="class">Class: </label>
+        <input type="number" name="class" id="class"><br><br><br>
+        <label for="eng">English: </label>
+        <input type="number" name="eng" id="eng">
+        <label for="math">Maths: </label>
+        <input type="number" name="math" id="math">
+        <label for="science">Science: </label>
+        <input type="number" name="science" id="science">
+        <button type="submit" onclick="AddStudent()">Submit</button>
+    </div>
+    <div id="dltstudent" style="display: none;">
+        <h2>Deleting Student Module</h2>
+        <p>Enter the Name of Student who you want to Delete</p>
+        <label for="stdName">Student Name: </label>
+        <input type="text" name="stdName" id="dltstdName">
+        <button type="submit" onclick="deleteStudent()">Search & Delete</button>
+    </div>
+    <div id="viewstudent" style="display: none;">
+        <h2>List of Students</h2>
+        <table style="border: 1px solid black;">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Class</th>
+                    <th>English</th>
+                    <th>Maths</th>
+                    <th>Science</th>
+                    <th>Total</th>
+                    <th>Grade</th>
+                </tr>
+            </thead>
+            <tbody id="stdview"></tbody>
+        </table>
+        <button type="submit" onclick="dashboard()">Back to Dashboard</button>
+    </div>
+</body>
+</html>

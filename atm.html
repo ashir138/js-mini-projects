@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        var arr=["Withdraw", "Deposite", "Transaction History", "Logout"];
+        let person = {username: "ashir", pin: 1234, amount:100.00};
+        let history=[];
+        function login(){
+            let username, pin;
+            username = document.getElementById('username').value;
+            pin = parseFloat(document.getElementById('pin').value);
+            if(isNaN(pin)){
+                alert("Pin should be a Number!");
+            }else{
+                if(person.username == username && person.pin == pin){
+                    alert("Logged In Successfullt");
+                    document.getElementById('log').style.display="none";
+                    document.getElementById('core').style.display="block";
+                    document.getElementById('amount').innerText = "Balance : " + person.amount;
+                    let text="<ol>";
+                    for(x in arr){
+                        text += "<li>" + arr[x] + "</li>";
+                    }
+                    document.getElementById('opt').innerHTML=text + "</ol>";
+
+                }else{
+                    alert("Login Failed! Invalid Credentials!");
+                }
+            }
+        }
+        function operations(){
+            document.getElementById('core').style.display="none";
+            let op = parseFloat(document.getElementById('op').value);
+            if(isNaN(op)){
+                alert("Kindly enter a Number! ");
+            }else {
+                switch (op) {
+                    case 1:
+                        document.getElementById('withdraw').style.display = "block";
+                        break;
+                    case 2:
+                        document.getElementById('deposite').style.display = "block";
+                        break;
+                    case 3:
+                        showTransactionHistory();
+                        break;
+                    case 4:
+                        alert("Logged Out Successfully! ");
+                        window.location.reload();
+                        break;
+                    default:
+                        alert("Write a number in Range of Operation");
+                        document.getElementById('core').style.display = "block";
+                }
+            }
+        }
+        function withdraw(){
+            let wamount = parseFloat(document.getElementById('wit').value);
+            if(isNaN(wamount)){
+                alert("Enter a Valid Number");
+                operations();
+            }else{
+                if(wamount > person.amount){
+                    alert("Insuficient Balance!");
+                    operations();
+                }else{
+                    person.amount-=wamount;
+                    alert("RS: " + wamount + " Withdrawn Successfully");
+                    history.push(`Withdrawn Rs ${wamount} on ${new Date().toLocaleString()}`);
+                    document.getElementById('withdraw').style.display="none";
+                    document.getElementById('core').style.display = "block";
+                    document.getElementById('amount').innerText = "Balance : " + person.amount;
+                }
+            }
+        }
+        function deposite(){
+            let damount = parseFloat(document.getElementById('dep').value);
+            if(isNaN(damount)){
+                alert("Enter a Valid Number");
+                operations();
+            }else{
+                alert("RS: " + damount + " Deposited Successfully");
+                person.amount += damount;
+                history.push(`Deposited Rs ${damount} on ${new Date().toLocaleString()}`);
+                document.getElementById('deposite').style.display = "none";
+                document.getElementById('core').style.display = "block";
+                document.getElementById('amount').innerText = "Balance : " + person.amount;
+            }
+        }
+        function showTransactionHistory() {
+            let histText = "<h3>Transaction History</h3><ul>";
+            if(history.length === 0){
+                histText += "<li>No transactions yet.</li>";
+            }else {
+                for (let i = 0; i < history.length; i++) {
+                    histText += "<li>" + history[i] + "</li>";
+                }
+            }
+            histText += "</ul>";
+            document.getElementById('trans').innerHTML = histText;
+            document.getElementById('transactions').style.display = "block";
+        }
+        function goback(){
+            document.getElementById('transactions').style.display="none";
+            document.getElementById('core').style.display="block";
+        }      
+        
+    </script>
+</head>
+<body>
+    <h1>Welcome to the ATM</h1>
+    <div id="log" style="display: block;">
+        <h3>Login Your Self Here</h3>
+        <label for="username">Username: </label>
+        <input type="text" name="username" id="username" placeholder="Username here">
+        <label for="pin">PIN: </label>
+        <input type="text" name="pin" id="pin" placeholder="PIN here"><br>
+        <button type="submit" onclick="login()">Login</button><br>
+    </div>
+    <div id="core" style="display: none;">
+        <p id="amount"></p>
+        <h3>Select Your Operation</h3>
+        <p id="opt"></p>
+        <input type="number" id="op" placeholder="eg. 1 for Withdraw">
+        <button type="submit" onclick="operations()">Submit</button>
+    </div>
+    <div id="withdraw" style="display: none;">
+        <h3>Welcome to Withdrawal Module</h3>
+        <input type="text" name="wit" id="wit" placeholder="Enter your ammount">
+        <button type="submit" onclick="withdraw()">Withdraw</button>
+    </div>
+    <div id="deposite" style="display: none;">
+        <h3>Welcome to Deposite Module</h3>
+        <input type="text" name="dep" id="dep" placeholder="Enter your ammount">
+        <button type="submit" onclick="deposite()">Deposite</button>
+    </div>
+    <div id="transactions" style="display: none;">
+        <div id="trans"></div>
+        <button type="submit" onclick="goback()">Back to Operatios</button>
+    </div>
+
+</body>
+</html>
+
+
+
+
+
